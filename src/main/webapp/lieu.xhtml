@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="jakarta.faces.facelets">
+    <h:head>
+        <title>Ajouter un Lieu</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #f4f4f4;
+                margin: 0;
+                padding: 20px;
+                text-align: center;
+            }
+            h1 {
+                color: #333;
+            }
+            .container {
+                background-color: #fff;
+                padding: 20px;
+                border-radius: 5px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+                margin: 20px auto;
+                max-width: 600px;
+            }
+            input[type="text"], input[type="number"], textarea {
+                width: 100%;
+                padding: 10px;
+                margin: 10px 0;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+            }
+            h:commandButton {
+                background-color: #5cb85c;
+                color: white;
+                border: none;
+                padding: 10px 15px;
+                border-radius: 5px;
+                cursor: pointer;
+                width: 100%;
+                font-size: 16px;
+            }
+            h:commandButton:hover {
+                background-color: #4cae4c;
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 20px;
+            }
+            th, td {
+                border: 1px solid #ccc;
+                padding: 10px;
+                text-align: left;
+            }
+            th {
+                background-color: #f2f2f2;
+            }
+        </style>
+    </h:head>
+    <h:body>
+        <div class="container">
+            <h1>Ajouter un Lieu</h1>
+            <h:form>
+                <h:outputLabel for="nom" value="Nom du Lieu:" />
+                <h:inputText id="nom" value="#{lieuBean.nom}" required="true"/>
+                
+                <h:outputLabel for="description" value="Description:" />
+                <h:inputTextarea id="description" value="#{lieuBean.description}" required="true"/>
+                
+                <h:outputLabel for="latitude" value="Latitude:" />
+                <h:inputText id="latitude" value="#{lieuBean.latitude}" required="true"/>
+
+                <h:outputLabel for="longitude" value="Longitude:" />
+                <h:inputText id="longitude" value="#{lieuBean.longitude}" required="true"/>
+
+                <h:commandButton value="Ajouter" action="#{lieuBean.ajouterLieu}"/>
+            </h:form>
+
+            <h:outputText value="#{lieuBean.message}" rendered="#{not empty lieuBean.message}"/>
+
+            <h2>Liste des Lieux Ajoutés</h2>
+
+    <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Description</th>
+            <th>Latitude</th>
+            <th>Longitude</th>
+        </tr>
+    </thead>
+    <tbody>
+        <ui:repeat value="#{lieuBean.lieux}" var="lieu">
+            <tr>
+                <td>${lieu.nom}</td>
+                <td>${lieu.description}</td>
+                <td>${lieu.latitude}</td>
+                <td>${lieu.longitude}</td>
+            </tr>
+        </ui:repeat>
+    </tbody>
+
+                </tbody>
+            </table>
+        </div>
+    </h:body>
+</html>
