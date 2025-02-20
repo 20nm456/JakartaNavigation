@@ -1,77 +1,74 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.navigation;
 
-/**
- *
- * @author g
- */
+import business.LieuEntrepriseBean;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import java.util.ArrayList;
+import java.io.Serializable;
 import java.util.List;
 
+@Named(value = "lieuBean")
 @RequestScoped
-@Named(value="lieuBean")
-/**
- *
- * @author g
- */
-public class LieuBean {
+public class LieuBean implements Serializable {
+
+    private int id;
     private String nom;
     private String description;
-    private String latitude;
-    private String longitude;
-    private List<Lieu> lieux = new ArrayList<>();
-    private String message;
+    private double longitude;
+    private double latitude;
 
-    // Getters et Setters
+    @Inject
+    private LieuEntrepriseBean lieuEntrepriseBean;
+
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
+    
     public String getNom() { return nom; }
     public void setNom(String nom) { this.nom = nom; }
-
+    
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
-
-    public String getLatitude() { return latitude; }
-    public void setLatitude(String latitude) { this.latitude = latitude; }
-
-    public String getLongitude() { return longitude; }
-    public void setLongitude(String longitude) { this.longitude = longitude; }
-
-    public List<Lieu> getLieux() { return lieux; }
-
-    public String getMessage() { return message; }
-
-    public void ajouterLieu() {
-        Lieu lieu = new Lieu(nom, description, latitude, longitude);
-        lieux.add(lieu);
-        message = "Lieu ajouté avec succès!";
-        // Réinitialiser les champs
-        nom = "";
-        description = "";
-        latitude = "";
-        longitude = "";
+    
+    public double getLongitude() { return longitude; }
+    public void setLongitude(double longitude) { this.longitude = longitude; }
+    
+    public double getLatitude() { return latitude; }
+    public void setLatitude(double latitude) { this.latitude = latitude; }
+    
+    public List<Lieu> getLieux() {
+        return lieuEntrepriseBean.listerTousLesLieux();
     }
+    
+    public void ajouterLieu() {
+        if (nom != null && !nom.isEmpty() && description != null && !description.isEmpty()) {
+            lieuEntrepriseBean.ajouterLieuEntreprise(nom, description, latitude, longitude);
+        }
+    }
+    
+    public void supprimerLieu(int id) {
+    System.out.println("Suppression du lieu avec ID : " + id);
+    lieuEntrepriseBean.supprimerLieu(id);
+    }
+
+    
+   public void preparerModification(Lieu lieu) {
+    System.out.println("Modification du lieu : " + lieu.getId());
+    this.id = lieu.getId();
+    this.nom = lieu.getNom();
+    this.description = lieu.getDescription();
+    this.latitude = lieu.getLatitude();
+    this.longitude = lieu.getLongitude();
 }
 
-class Lieu {
-    private String nom;
-    private String description;
-    private String latitude;
-    private String longitude;
-
-    public Lieu(String nom, String description, String latitude, String longitude) {
-        this.nom = nom;
-        this.description = description;
-        this.latitude = latitude;
-        this.longitude = longitude;
+    
+    public void modifierLieu() {
+        Lieu lieu = lieuEntrepriseBean.trouverLieuParId(id);
+        if (lieu != null) {
+            lieu.setNom(nom);
+            lieu.setDescription(description);
+            lieu.setLatitude(latitude);
+            lieu.setLongitude(longitude);
+            lieuEntrepriseBean.mettreAJourLieu(lieu);
+        }
     }
-
-    // Getters
-    public String getNom() { return nom; }
-    public String getDescription() { return description; }
-    public String getLatitude() { return latitude; }
-    public String getLongitude() { return longitude; }
 }

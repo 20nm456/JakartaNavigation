@@ -2,107 +2,210 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:ui="jakarta.faces.facelets">
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core">
     <h:head>
-        <title>Ajouter un Lieu</title>
-        <style>
+        <title>Gestion des Lieux</title>
+       <style>
             body {
                 font-family: Arial, sans-serif;
-                background-color: #f4f4f4;
+                background-color: #f8f9fa;
                 margin: 0;
                 padding: 20px;
-                text-align: center;
-            }
-            h1 {
-                color: #333;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
             }
             .container {
-                background-color: #fff;
+                width: 90%;
+                max-width: 1200px;
+                background: white;
                 padding: 20px;
-                border-radius: 5px;
-                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-                margin: 20px auto;
-                max-width: 600px;
+                border-radius: 8px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                display: flex;
+                justify-content: space-between;
             }
-            input[type="text"], input[type="number"], textarea {
+            .container h1, .container h2 {
+                text-align: center;
+                color: #333;
+            }
+            .containerForm, .containerTab {
+                width: 48%;
+                padding: 20px;
+                background: #ffffff;
+                border-radius: 8px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
+            input, textarea {
                 width: 100%;
                 padding: 10px;
-                margin: 10px 0;
-                border: 1px solid #ccc;
+                margin-top: 5px;
+                border: 1px solid #ddd;
                 border-radius: 5px;
+            }
+            .btn-container {
+                display: flex;
+                justify-content: center;
+                margin-top: 15px;
             }
             h:commandButton {
-                background-color: #5cb85c;
+                background-color: #28a745;
                 color: white;
                 border: none;
-                padding: 10px 15px;
+                padding: 10px 20px;
                 border-radius: 5px;
                 cursor: pointer;
-                width: 100%;
-                font-size: 16px;
+                transition: background 0.3s;
             }
             h:commandButton:hover {
-                background-color: #4cae4c;
+                background-color: #218838;
             }
             table {
                 width: 100%;
                 border-collapse: collapse;
                 margin-top: 20px;
+                background: #fff;
             }
             th, td {
-                border: 1px solid #ccc;
-                padding: 10px;
+                padding: 12px;
+                border: 1px solid #ddd;
                 text-align: left;
             }
             th {
-                background-color: #f2f2f2;
+                background: #007bff;
+                color: white;
+            }
+            .action-buttons {
+                display: flex;
+                justify-content: space-between;
+            }
+            .action-buttons h:commandButton {
+                padding: 5px 10px;
+                font-size: 14px;
+                background-color: #ffc107;
+                border-radius: 4px;
+            }
+            .action-buttons h:commandButton:last-child {
+                background-color: #dc3545;
+                color: white;
+            }
+            .modal {
+                display: none;
+                position: fixed;
+                z-index: 10;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.5);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .modal-content {
+                background: white;
+                padding: 20px;
+                border-radius: 8px;
+                width: 40%;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            }
+            .close {
+                float: right;
+                font-size: 24px;
+                cursor: pointer;
             }
         </style>
+        <script>
+            function ouvrirModal() {
+                document.getElementById('editModal').style.display = 'block';
+            }
+            function fermerModal() {
+                document.getElementById('editModal').style.display = 'none';
+            }
+            function confirmerSuppression(action) {
+                if (confirm("Voulez-vous vraiment supprimer ce lieu ?")) {
+                    action.click();
+                }
+            }
+        </script>
     </h:head>
     <h:body>
         <div class="container">
-            <h1>Ajouter un Lieu</h1>
-            <h:form>
-                <h:outputLabel for="nom" value="Nom du Lieu:" />
-                <h:inputText id="nom" value="#{lieuBean.nom}" required="true"/>
-                
-                <h:outputLabel for="description" value="Description:" />
-                <h:inputTextarea id="description" value="#{lieuBean.description}" required="true"/>
-                
-                <h:outputLabel for="latitude" value="Latitude:" />
-                <h:inputText id="latitude" value="#{lieuBean.latitude}" required="true"/>
+            <!-- Formulaire d'ajout -->
+            <div class="containerForm">
+                <h1>Ajouter un Lieu</h1>
+                <h:form>
+                    <h:outputLabel for="nom" value="Nom du Lieu:" />
+                    <h:inputText id="nom" value="#{lieuBean.nom}" required="true"/>
+                    <h:outputLabel for="description" value="Description:" />
+                    <h:inputTextarea id="description" value="#{lieuBean.description}" required="true"/>
+                    <h:outputLabel for="latitude" value="Latitude:" />
+                    <h:inputText id="latitude" value="#{lieuBean.latitude}" required="true"/>
+                    <h:outputLabel for="longitude" value="Longitude:" />
+                    <h:inputText id="longitude" value="#{lieuBean.longitude}" required="true"/>
+                    <h:commandButton value="Ajouter" action="#{lieuBean.ajouterLieu}"/>
+                </h:form>
+            </div>
 
-                <h:outputLabel for="longitude" value="Longitude:" />
-                <h:inputText id="longitude" value="#{lieuBean.longitude}" required="true"/>
-
-                <h:commandButton value="Ajouter" action="#{lieuBean.ajouterLieu}"/>
-            </h:form>
-
-            <h:outputText value="#{lieuBean.message}" rendered="#{not empty lieuBean.message}"/>
-
-            <h2>Liste des Lieux Ajoutés</h2>
-
-    <thead>
-        <tr>
-            <th>Nom</th>
-            <th>Description</th>
-            <th>Latitude</th>
-            <th>Longitude</th>
-        </tr>
-    </thead>
-    <tbody>
-        <ui:repeat value="#{lieuBean.lieux}" var="lieu">
+            <!-- Table de visualisation -->
+            <div class="containerTab">
+                <h2>Liste des Lieux</h2>
+                <h:form id="lieuxTable">
+    <table>
+        <thead>
             <tr>
-                <td>${lieu.nom}</td>
-                <td>${lieu.description}</td>
-                <td>${lieu.latitude}</td>
-                <td>${lieu.longitude}</td>
+                <th>Nom</th>
+                <th>Description</th>
+                <th>Latitude</th>
+                <th>Longitude</th>
+                <th>Actions</th>
             </tr>
-        </ui:repeat>
-    </tbody>
+        </thead>
+        <tbody>
+            <ui:repeat value="#{lieuBean.lieux}" var="lieu">
+                <tr>
+                    <td>#{lieu.nom}</td>
+                    <td>#{lieu.description}</td>
+                    <td>#{lieu.latitude}</td>
+                    <td>#{lieu.longitude}</td>
+                    <td>
+                        <h:commandButton value="Modifier" action="#{lieuBean.preparerModification(lieu)}">
+                            <f:ajax execute="@this" render="editModal" onevent="function(data){ if(data.status === 'success') ouvrirModal(); }"/>
+                        </h:commandButton>
+                        <h:commandButton value="Supprimer" action="#{lieuBean.supprimerLieu(lieu.id)}">
+                            <f:ajax execute="@this" render="lieuxTable" onevent="function(data){ if(data.status === 'success') alert('Lieu supprimé avec succès !'); }"/>
+                        </h:commandButton>
+                    </td>
+                </tr>
+            </ui:repeat>
+        </tbody>
+    </table>
+</h:form>
 
-                </tbody>
-            </table>
+            </div>
+        </div>
+
+        <!-- Modal de modification -->
+        <div id="editModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="fermerModal()">&times;</span>
+                <h2>Modifier Lieu</h2>
+                <h:form id="editModal">
+                    <h:inputHidden value="#{lieuBean.id}" />
+                    <h:outputLabel for="editNom" value="Nom:" />
+                    <h:inputText id="editNom" value="#{lieuBean.nom}" required="true"/>
+                    <h:outputLabel for="editDescription" value="Description:" />
+                    <h:inputTextarea id="editDescription" value="#{lieuBean.description}" required="true"/>
+                    <h:outputLabel for="editLatitude" value="Latitude:" />
+                    <h:inputText id="editLatitude" value="#{lieuBean.latitude}" required="true"/>
+                    <h:outputLabel for="editLongitude" value="Longitude:" />
+                    <h:inputText id="editLongitude" value="#{lieuBean.longitude}" required="true"/>
+                    <h:commandButton value="Enregistrer" action="#{lieuBean.modifierLieu}"/>
+                </h:form>
+
+            </div>
         </div>
     </h:body>
 </html>

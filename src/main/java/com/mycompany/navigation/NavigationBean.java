@@ -9,7 +9,7 @@ import java.io.IOException;
 import jakarta.inject.Named;
 import jakarta.enterprise.context.RequestScoped;
 
-@Named(value="navgationController")
+@Named(value="navigationController")
 @RequestScoped
 
 /**
@@ -21,7 +21,7 @@ public class NavigationBean {
     
     public void voirAjouter(){
         try{
-            FacesContext.getCurrentInstance().getExternalContext().redirect("ajouter.xhtml");
+            FacesContext.getCurrentInstance().getExternalContext().redirect("lieu.xhtml");
         }catch (IOException e){
             e.printStackTrace();
                 }
@@ -36,7 +36,7 @@ public class NavigationBean {
     
     public void voirVisiter(){
         try{
-            FacesContext.getCurrentInstance().getExternalContext().redirect("visiter.xhtml");
+            FacesContext.getCurrentInstance().getExternalContext().redirect("home.xhtml");
         }catch (IOException e){
             e.printStackTrace();
                 }
