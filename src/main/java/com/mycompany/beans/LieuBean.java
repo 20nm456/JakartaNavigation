@@ -1,6 +1,7 @@
-package com.mycompany.navigation;
+package com.mycompany.beans;
 
 import business.LieuEntrepriseBean;
+import com.mycompany.navigation.Lieu;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
